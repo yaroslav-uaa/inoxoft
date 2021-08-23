@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const ctrl = require('../controllers/users')
 
-router.get('/', ctrl.usersList)
-router.get('/:userId', ctrl.userInfo)
+router.post('/signup', ctrl.register)
+router.post('/signin', ctrl.login)
 
 module.exports = router

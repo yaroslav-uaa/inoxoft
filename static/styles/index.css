@@ -1,5 +1,12 @@
-* {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
 }
 
 .ver__body {
@@ -17,26 +24,26 @@
 }
 
 .ver__container {
-    padding: 30px;
+    padding-top: 30px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
-.ver__text {
+.ver__box {
     position: absolute;
     top: 40%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -45%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    width: 90%;
+    width: 60%;
     max-width: 700px;
-    height: 80%;
-    max-height: 50vh;
+    height: 70%;
+    max-height: 60vh;
     padding: 40px;
     background-color: #fffefe30;
     border-radius: 6px;
@@ -102,6 +109,20 @@
     letter-spacing: 0.4rem;
 }
 
+.ver__text {
+    margin: 10px 10px;
+    font-family: Gugi, sans-serif;
+    font-size: 14px;
+    color: black;
+    letter-spacing: 0.4rem;
+}
+
+.ver__text.error {
+    color: red;
+    font-size: 24px;
+}
+
+
 .ver__users__card {
     width: 300px;
     display: flex;
@@ -109,6 +130,19 @@
     align-items: center;
     padding: 20px;
     margin: 10px;
+    background-color: #fffefe30;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px 3px #212121aa;
+}
+
+.ver__user__card {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -45%);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
     background-color: #fffefe30;
     border-radius: 6px;
     box-shadow: 0 4px 12px 3px #212121aa;

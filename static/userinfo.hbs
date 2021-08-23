@@ -15,15 +15,12 @@
     <title>Document</title>
 </head>
 <body class="ver__body">
-<ul class="ver__container">
-    {{#each users}}
-        <li class="ver__users__card">
-            <form action="/users/{{this.id}}" method="get" class="ver__form">
-                <p class="ver__text">Email : {{this.email}}</p>
-                <button class="ver__btn">Check info</button>
-            </form>
-        </li>
-    {{/each}}
-</ul>
+<div class="ver__container">
+    <div class="ver__user__card">
+        <p class="ver__text">id : {{this.id}}</p>
+        <p class="ver__text">email : {{this.email}}</p>
+        <p class="ver__text">password : {{this.password}}</p>
+    </div>
+</div>
 </body>
 </html>
