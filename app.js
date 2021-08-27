@@ -1,32 +1,31 @@
-const express = require('express')
-const expressHbs = require('express-handlebars')
-const path = require('path')
+const express = require('express');
+const path = require('path');
 
-const {PORT} = require('./config/config')
-const {NOT_FOUND} = require('./config/statusCodes.enum')
-const entryRouter = require('./routes/entry')
-const userRouter = require('./routes/users')
-const viewsRouter = require('./views/views')
+const entryRouter = require('./routes/entry');
+const userRouter = require('./routes/users');
+
+const { PORT } = require('./config/config');
+const { NOT_FOUND } = require('./config/statusCodes.enum');
 
 const app = express();
-const staticPath = path.join(__dirname, 'static')
+const staticPath = path.join(__dirname, 'static');
 
-app.use(express.urlencoded({extended: true}))
-app.use(express.static(staticPath))
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(staticPath));
 
-app.set('view engine', '.hbs');
-app.engine('.hbs', expressHbs({defaultLayout: false}))
-app.set('views', staticPath)
-app.use(express.json())
+app.use(express.json());
 
-app.use('/', entryRouter)
-app.use('/users', userRouter)
-app.use('/', viewsRouter)
+app.use('/', entryRouter);
+app.use('/users', userRouter);
 
 app.use((req, res) => {
-    res.render('error', {status: 'error', code: NOT_FOUND, message: 'Not found'})
-})
+    res.status(NOT_FOUND).json({
+        status: 'error',
+        code: NOT_FOUND,
+        message: 'sh*t happens',
+    });
+});
 
 app.listen(PORT, () => {
-    console.log('App listen', PORT)
-})
+    console.log('App listen', PORT);
+});
