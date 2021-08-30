@@ -1,43 +1,26 @@
-const fs = require('fs/promises');
-const path = require('path');
+const User = require('../model/users');
 
-const { v4: uuid } = require('uuid');
+const findAllUsers = () => User.find();
+const findUserById = (id) => User.findById({ _id: id })
+    .select('-password');
 
-const usersPath = path.join(__dirname, '../model', 'users.json');
+const findUserByEmail = (email) => User.findOne({ email });
 
-const readData = async () => {
-    const data = await fs.readFile(usersPath, 'utf-8');
-    return JSON.parse(data);
+const createUser = async (body) => {
+    const user = new User(body);
+    // eslint-disable-next-line no-return-await
+    return await user.save();
 };
 
-const getUserByEmail = async (email) => {
-    const users = await readData();
-    const [result] = users.filter((el) => el.email === email);
-    return result;
-};
+const updateUser = (id, body) => User.findOneAndUpdate({ _id: id }, { ...body }, { new: true });
 
-const getUserInfo = async (userId) => {
-    const users = await readData();
-    const [result] = users.filter((el) => el.id === userId);
-    return result;
-};
-
-const addUser = async (body) => {
-    const id = uuid();
-    const user = {
-        id,
-        ...body,
-    };
-    const users = await readData();
-
-    const newUser = [...users, user];
-    await fs.writeFile(usersPath, JSON.stringify(newUser));
-    return user;
-};
+const deleteUser = (id) => User.findOneAndDelete({ _id: id });
 
 module.exports = {
-    readData,
-    addUser,
-    getUserInfo,
-    getUserByEmail,
+    findAllUsers,
+    findUserById,
+    findUserByEmail,
+    createUser,
+    updateUser,
+    deleteUser,
 };

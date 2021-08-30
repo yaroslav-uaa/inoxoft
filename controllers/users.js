@@ -1,97 +1,51 @@
 const {
-    getUserInfo,
-    getUserByEmail,
-    addUser,
-    readData,
+    findAllUsers,
+    deleteUser,
+    updateUser,
 } = require('../repositories/users');
-const HttpCode = require('../config/statusCodes.enum');
 
-const register = async (req, res, next) => {
+const getAllUsers = async (req, res, next) => {
     try {
-        const user = await getUserByEmail(req.body.email);
-        if (user) {
-            return res.status(HttpCode.CONFLICT).json({
-                status: 'error',
-                code: HttpCode.CONFLICT,
-                message: 'Email is already used',
-            });
-        }
+        const users = await findAllUsers();
 
-        const { id, email, password } = await addUser(req.body);
-
-        return res.status(HttpCode.OK).json({
-            status: 'success',
-            code: HttpCode.OK,
-            message: 'You registered successfully',
-            user: {
-                id,
-                email,
-                password,
-            },
+        res.json({
+            users,
         });
     } catch (e) {
         next(e);
     }
 };
 
-const login = async (req, res, next) => {
+// eslint-disable-next-line require-await
+const getCurrentUser = async (req, res, next) => {
     try {
-        const user = await getUserByEmail(req.body.email);
-        const isValidPassword = user?.password === req.body.password;
+        const { user } = req;
 
-        if (!user || !isValidPassword) {
-            return res.status(HttpCode.UNAUTHORIZED).json({
-                status: 'unauthorized',
-                code: HttpCode.UNAUTHORIZED,
-                message: 'invalid login or password',
-            });
-        }
-
-        return res.status(HttpCode.OK).json({
-            status: 'success',
-            code: HttpCode.OK,
-            message: 'You have been logged in successfully',
+        res.json({
+            user,
         });
     } catch (e) {
         next(e);
     }
 };
 
-const usersList = async (req, res, next) => {
+const deleteUserAccount = async (req, res, next) => {
     try {
-        const users = await readData();
+        await deleteUser(req.params.userId);
 
-        res.status(HttpCode.OK).json({
-            status: 'success',
-            code: HttpCode.OK,
-            data: [users],
+        res.json({
+            message: 'Delete successfully',
         });
     } catch (e) {
         next(e);
     }
 };
-
-const userInfo = async (req, res, next) => {
+const updateUserAccount = async (req, res, next) => {
     try {
-        const user = await getUserInfo(req.params.userId);
-        if (!user) {
-            res.status(HttpCode.NOT_FOUND).json({
-                status: 'error',
-                code: HttpCode.NOT_FOUND,
-                message: 'User not found',
-            });
-        }
+        const user = await updateUser(req.params.userId, req.body);
 
-        const { id, email, password } = user;
-
-        res.status(HttpCode.OK).json({
-            status: 'success',
-            code: HttpCode.OK,
-            data: {
-                id,
-                email,
-                password,
-            },
+        res.json({
+            user,
         });
     } catch (e) {
         next(e);
@@ -99,8 +53,8 @@ const userInfo = async (req, res, next) => {
 };
 
 module.exports = {
-    register,
-    login,
-    usersList,
-    userInfo,
+    getAllUsers,
+    getCurrentUser,
+    deleteUserAccount,
+    updateUserAccount,
 };
