@@ -1,8 +1,9 @@
 const User = require('../model/users');
 
-const findAllUsers = () => User.find();
-const findUserById = (id) => User.findById({ _id: id })
+const findAllUsers = () => User.find()
     .select('-password');
+
+const findUserById = (id) => User.findById({ _id: id });
 
 const findUserByEmail = (email) => User.findOne({ email });
 

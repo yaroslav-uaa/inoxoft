@@ -1,11 +1,13 @@
 const { createUser } = require('../repositories/users');
+const userNormalize = require('../utils/user.utils');
 
 const register = async (req, res, next) => {
     try {
         const user = await createUser(req.body);
+        const normalizedUser = userNormalize(user);
 
         return res.json({
-            user,
+            normalizedUser,
         });
     } catch (e) {
         next(e);

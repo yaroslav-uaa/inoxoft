@@ -15,7 +15,6 @@ const isEmailExist = async (req, res, next) => {
         const { email } = req.body;
 
         const userByEmail = await findUserByEmail(email);
-
         if (userByEmail) {
             throw new ErrorHandler(CONFLICT, EMAIL_CONFLICT);
         }

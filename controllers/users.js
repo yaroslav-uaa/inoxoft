@@ -3,6 +3,7 @@ const {
     deleteUser,
     updateUser,
 } = require('../repositories/users');
+const userNormalize = require('../utils/user.utils');
 
 const getAllUsers = async (req, res, next) => {
     try {
@@ -20,9 +21,10 @@ const getAllUsers = async (req, res, next) => {
 const getCurrentUser = async (req, res, next) => {
     try {
         const { user } = req;
+        const normalizedUser = userNormalize(user);
 
         res.json({
-            user,
+            normalizedUser,
         });
     } catch (e) {
         next(e);
@@ -43,9 +45,10 @@ const deleteUserAccount = async (req, res, next) => {
 const updateUserAccount = async (req, res, next) => {
     try {
         const user = await updateUser(req.params.userId, req.body);
+        const normalizedUser = userNormalize(user);
 
         res.json({
-            user,
+            normalizedUser,
         });
     } catch (e) {
         next(e);
