@@ -1,11 +1,11 @@
-const { createUser } = require('../repositories/users');
+const User = require('../model/users');
 const userNormalize = require('../utils/user.utils');
 
 const register = async (req, res, next) => {
     try {
-        const user = await createUser(req.body);
-        const normalizedUser = userNormalize(user);
+        const user = await User.create({ ...req.body });
 
+        const normalizedUser = userNormalize(user);
         return res.json({
             normalizedUser,
         });
@@ -14,8 +14,7 @@ const register = async (req, res, next) => {
     }
 };
 
-// eslint-disable-next-line require-await
-const login = async (req, res, next) => {
+const login = (req, res, next) => {
     try {
         return res.json({
             message: 'You have been logged in successfully',

@@ -1,13 +1,11 @@
-const {
-    findAllUsers,
-    deleteUser,
-    updateUser,
-} = require('../repositories/users');
+const User = require('../model/users');
+
 const userNormalize = require('../utils/user.utils');
 
 const getAllUsers = async (req, res, next) => {
     try {
-        const users = await findAllUsers();
+        const users = await User.find({})
+            .select('-password');
 
         res.json({
             users,
@@ -17,8 +15,7 @@ const getAllUsers = async (req, res, next) => {
     }
 };
 
-// eslint-disable-next-line require-await
-const getCurrentUser = async (req, res, next) => {
+const getCurrentUser = (req, res, next) => {
     try {
         const { user } = req;
         const normalizedUser = userNormalize(user);
@@ -33,7 +30,7 @@ const getCurrentUser = async (req, res, next) => {
 
 const deleteUserAccount = async (req, res, next) => {
     try {
-        await deleteUser(req.params.userId);
+        await User.findByIdAndDelete({ _id: req.params.userId });
 
         res.json({
             message: 'Delete successfully',
@@ -44,7 +41,7 @@ const deleteUserAccount = async (req, res, next) => {
 };
 const updateUserAccount = async (req, res, next) => {
     try {
-        const user = await updateUser(req.params.userId, req.body);
+        const user = await User.findOneAndUpdate({ _id: req.params.userId }, { ...req.body }, { new: true });
         const normalizedUser = userNormalize(user);
 
         res.json({

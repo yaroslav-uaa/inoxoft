@@ -1,15 +1,10 @@
-const {
-    findAllCars,
-    createCar,
-    deleteCar,
-    updateCar,
-} = require('../repositories/cars');
+const Car = require('../model/cars');
 
 const getAll = async (req, res, next) => {
     try {
         const { userId } = req.query;
 
-        const cars = await findAllCars(userId);
+        const cars = await Car.find({ owner: userId });
         res.json({
             cars,
         });
@@ -19,7 +14,7 @@ const getAll = async (req, res, next) => {
 };
 
 // eslint-disable-next-line require-await
-const getThis = async (req, res, next) => {
+const getThis = (req, res, next) => {
     try {
         const { car } = req;
 
@@ -33,7 +28,7 @@ const add = async (req, res, next) => {
     try {
         const { userId } = req.query;
 
-        const car = await createCar(userId, req.body);
+        const car = await Car.create({ owner: userId, ...req.body });
 
         res.json({ car });
     } catch (e) {
@@ -44,8 +39,17 @@ const add = async (req, res, next) => {
 const update = async (req, res, next) => {
     try {
         const { userId } = req.query;
+        const { carId } = req.params;
 
-        const car = await updateCar(userId, req.params.carId, req.body);
+        const car = await Car.findOneAndUpdate(
+            {
+                _id: carId,
+                owner: userId,
+            },
+            { ...req.body },
+            { new: true },
+        );
+
         res.json({
             message: 'Update car successfully',
             car,
@@ -58,8 +62,13 @@ const update = async (req, res, next) => {
 const remove = async (req, res, next) => {
     try {
         const { userId } = req.query;
+        const { carId } = req.params;
 
-        await deleteCar(userId, req.params.carId);
+        await Car.findOneAndDelete({
+            _id: carId,
+            owner: userId,
+        });
+
         res.json({
             message: 'Delete successfully',
         });

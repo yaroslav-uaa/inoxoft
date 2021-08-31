@@ -1,4 +1,4 @@
-const { findCarById } = require('../repositories/cars');
+const Car = require('../model/cars');
 
 const ErrorHandler = require('../errors/errorHandler');
 
@@ -8,7 +8,12 @@ const { CAR_ID_CONFLICT } = require('../config/errorTemplates');
 const isCarIdValid = async (req, res, next) => {
     try {
         const { userId } = req.query;
-        const carById = await findCarById(userId, req.params.carId);
+        const { carId } = req.params;
+
+        const carById = await Car.findOne({
+            _id: carId,
+            owner: userId,
+        });
 
         if (!carById) {
             throw new ErrorHandler(BAD_REQUEST, CAR_ID_CONFLICT);

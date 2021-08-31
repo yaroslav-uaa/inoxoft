@@ -10,7 +10,7 @@ const createCarSchema = Joi.object({
         .max(30)
         .required(),
     model: Joi.string()
-        .min(3)
+        .min(2)
         .max(30)
         .required(),
     year: Joi.number()
@@ -27,7 +27,7 @@ const updateCarSchema = Joi.object({
         .max(30)
         .optional(),
     model: Joi.string()
-        .min(3)
+        .min(2)
         .max(30)
         .optional(),
     year: Joi.number()

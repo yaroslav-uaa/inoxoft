@@ -1,4 +1,4 @@
-const { findUserByEmail } = require('../repositories/users');
+const User = require('../model/users');
 const ErrorHandler = require('../errors/errorHandler');
 
 const {
@@ -14,7 +14,8 @@ const isEmailExist = async (req, res, next) => {
     try {
         const { email } = req.body;
 
-        const userByEmail = await findUserByEmail(email);
+        const userByEmail = await User.findOne({ email });
+
         if (userByEmail) {
             throw new ErrorHandler(CONFLICT, EMAIL_CONFLICT);
         }
@@ -27,9 +28,14 @@ const isEmailExist = async (req, res, next) => {
 
 const isValidUserData = async (req, res, next) => {
     try {
-        const user = await findUserByEmail(req.body.email);
+        const {
+            email,
+            password
+        } = req.body;
 
-        const isValidPassword = await user?.isValidPassword(req.body.password);
+        const user = await User.findOne({ email });
+
+        const isValidPassword = await user?.isValidPassword(password);
 
         if (!user || !isValidPassword) {
             throw new ErrorHandler(UNAUTHORIZED, INCORRECT);
