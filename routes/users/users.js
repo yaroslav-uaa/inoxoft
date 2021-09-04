@@ -10,30 +10,24 @@ const {
     checkUserRole,
 } = require('../../middleware/user.middleware');
 const { validationUpdate, validateMongoId } = require('./validation');
+const { ADMIN } = require('../../config/user-roler.enum');
 
 router.get('/', ctrl.getAllUsers);
 
 router.use(
     '/:userId',
     getUserByDynamicParam('userId', 'params', '_id'),
+    validateMongoId,
     isUserIdValid,
 );
 
 router
-    .get('/:userId', validateMongoId, isUserIdValid, ctrl.getCurrentUser)
-    .delete(
-        '/:userId',
-        checkUserRole,
-        validateMongoId,
-        isUserIdValid,
-        ctrl.deleteUserAccount,
-    )
+    .get('/:userId', ctrl.getCurrentUser)
+    .delete('/:userId', checkUserRole([ADMIN]), ctrl.deleteUserAccount)
     .put(
         '/:userId',
-        checkUserRole,
-        validateMongoId,
+        checkUserRole([ADMIN]),
         validationUpdate,
-        isUserIdValid,
         ctrl.updateUserAccount,
     );
 
