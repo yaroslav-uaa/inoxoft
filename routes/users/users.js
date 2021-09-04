@@ -16,25 +16,13 @@ router.get('/', ctrl.getAllUsers);
 router.use(
     '/:userId',
     getUserByDynamicParam('userId', 'params', '_id'),
+    validateMongoId,
     isUserIdValid,
 );
 
 router
-    .get('/:userId', validateMongoId, isUserIdValid, ctrl.getCurrentUser)
-    .delete(
-        '/:userId',
-        checkUserRole,
-        validateMongoId,
-        isUserIdValid,
-        ctrl.deleteUserAccount,
-    )
-    .put(
-        '/:userId',
-        checkUserRole,
-        validateMongoId,
-        validationUpdate,
-        isUserIdValid,
-        ctrl.updateUserAccount,
-    );
+    .get('/:userId', ctrl.getCurrentUser)
+    .delete('/:userId', checkUserRole, ctrl.deleteUserAccount)
+    .put('/:userId', checkUserRole, validationUpdate, ctrl.updateUserAccount);
 
 module.exports = router;
