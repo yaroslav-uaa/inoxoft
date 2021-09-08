@@ -1,4 +1,4 @@
-const Car = require('../model/cars');
+const Car = require('../model/Cars');
 
 const getAll = async (req, res, next) => {
     try {

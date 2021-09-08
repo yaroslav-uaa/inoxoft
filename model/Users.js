@@ -1,10 +1,8 @@
-const {
-    Schema,
-    model
-} = require('mongoose');
+const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userRolesEnum = require('../config/user-roler.enum');
+const userRolesEnum = require('../config/userRolesEnum');
+
 const SALT_WORK_FACTOR = 8;
 
 const userSchema = new Schema(
@@ -28,6 +26,10 @@ const userSchema = new Schema(
             type: String,
             default: userRolesEnum.USER,
             enum: Object.values(userRolesEnum),
+        },
+        verified: {
+            type: Boolean,
+            default: false,
         },
     },
     {

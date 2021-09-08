@@ -7,33 +7,15 @@ const {
 } = require('../../config/constants');
 
 const registerSchema = Joi.object({
-    email: Joi.string()
-        .regex(EMAIL_REGEXP)
-        .trim()
-        .required(),
-    password: Joi.string()
-        .regex(PASSWORD_REGEXP)
-        .trim()
-        .required(),
-    name: Joi.string()
-        .regex(NAME_REGEXP)
-        .trim()
-        .required(),
+    email: Joi.string().regex(EMAIL_REGEXP).trim().required(),
+    password: Joi.string().regex(PASSWORD_REGEXP).trim().required(),
+    name: Joi.string().regex(NAME_REGEXP).trim().required(),
 });
 
 const loginSchema = Joi.object({
-    email: Joi.string()
-        .regex(EMAIL_REGEXP)
-        .trim()
-        .required(),
-    password: Joi.string()
-        .regex(PASSWORD_REGEXP)
-        .trim()
-        .required(),
-    name: Joi.string()
-        .regex(NAME_REGEXP)
-        .trim()
-        .optional(),
+    email: Joi.string().regex(EMAIL_REGEXP).trim().required(),
+    password: Joi.string().regex(PASSWORD_REGEXP).trim().required(),
+    name: Joi.string().regex(NAME_REGEXP).trim().optional(),
 });
 
 const validate = async (schema, obj, next) => {

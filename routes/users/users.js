@@ -2,33 +2,38 @@ const express = require('express');
 
 const router = express.Router();
 
-const ctrl = require('../../controllers/users');
+const { users } = require('../../controllers');
 
-const {
-    isUserIdValid,
-    getUserByDynamicParam,
-    checkUserRole,
-} = require('../../middleware/user.middleware');
 const { validationUpdate, validateMongoId } = require('./validation');
-const { ADMIN } = require('../../config/user-roler.enum');
+const { authMiddleware, userMiddleware } = require('../../middleware');
+const { tokenTypes, userRolesEnum } = require('../../config');
 
-router.get('/', ctrl.getAllUsers);
+router.get(
+    '/',
+    authMiddleware.checkAccessToken(tokenTypes.ACCESS_TYPE),
+    users.getAllUsers,
+);
 
 router.use(
     '/:userId',
-    getUserByDynamicParam('userId', 'params', '_id'),
+    userMiddleware.getUserByDynamicParam('userId', 'params', '_id'),
     validateMongoId,
-    isUserIdValid,
+    userMiddleware.isUserIdValid,
+    authMiddleware.checkAccessToken(tokenTypes.ACCESS_TYPE),
 );
 
 router
-    .get('/:userId', ctrl.getCurrentUser)
-    .delete('/:userId', checkUserRole([ADMIN]), ctrl.deleteUserAccount)
+    .get('/:userId', users.getCurrentUser)
+    .delete(
+        '/:userId',
+        userMiddleware.checkUserRole([userRolesEnum.ADMIN]),
+        users.deleteUserAccount,
+    )
     .put(
         '/:userId',
-        checkUserRole([ADMIN]),
+        userMiddleware.checkUserRole([userRolesEnum.ADMIN]),
         validationUpdate,
-        ctrl.updateUserAccount,
+        users.updateUserAccount,
     );
 
 module.exports = router;

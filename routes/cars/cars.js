@@ -1,26 +1,26 @@
 const express = require('express');
+
 const router = express.Router();
 
-const ctrl = require('../../controllers/cars');
-const {
-    validateUpdateCar,
-    validateCreateCar,
-    validateMongoId,
-} = require('./validation');
-const { isCarIdValid } = require('../../middleware/car.middlerware');
+const { cars } = require('../../controllers');
+const carsValidator = require('./validation');
+const { authMiddleware, carMiddleware } = require('../../middleware');
+const { tokenTypes } = require('../../config');
 
-router.get('/', ctrl.getAll)
-    .post('/', validateCreateCar, ctrl.add);
-
+router.use('/', authMiddleware.checkAccessToken(tokenTypes.ACCESS_TYPE));
 router
-    .get('/:carId', validateMongoId, isCarIdValid, ctrl.getThis)
-    .delete('/:carId', validateMongoId, isCarIdValid, ctrl.remove)
-    .put(
-        '/:carId',
-        validateMongoId,
-        validateUpdateCar,
-        isCarIdValid,
-        ctrl.update,
-    );
+    .get('/', cars.getAll)
+    .post('/', carsValidator.validateCreateCar, cars.add);
+
+router.use(
+    '/:cardId',
+    carsValidator.validateMongoId,
+    carMiddleware.isCarIdValid,
+    authMiddleware.checkAccessToken(tokenTypes.ACCESS_TYPE),
+);
+router
+    .get('/:carId', cars.getThis)
+    .delete('/:carId', cars.remove)
+    .put('/:carId', carsValidator.validateUpdateCar, cars.update);
 
 module.exports = router;

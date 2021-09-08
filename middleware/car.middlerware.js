@@ -1,9 +1,8 @@
-const Car = require('../model/cars');
+const Car = require('../model/Cars');
 
 const ErrorHandler = require('../errors/errorHandler');
 
-const { BAD_REQUEST } = require('../config/statusCodes.enum');
-const { CAR_ID_CONFLICT } = require('../config/errorTemplates');
+const { STATUS_CODES, ERRORS_TEMPLATE } = require('../config');
 
 const isCarIdValid = async (req, res, next) => {
     try {
@@ -16,7 +15,10 @@ const isCarIdValid = async (req, res, next) => {
         });
 
         if (!carById) {
-            throw new ErrorHandler(BAD_REQUEST, CAR_ID_CONFLICT);
+            throw new ErrorHandler(
+                STATUS_CODES.BAD_REQUEST,
+                ERRORS_TEMPLATE.CAR_ID_CONFLICT,
+            );
         }
         req.car = carById;
 

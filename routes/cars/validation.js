@@ -5,35 +5,16 @@ const { CURRENT_YEAR } = require('../../config/constants');
 const { BAD_REQUEST } = require('../../config/statusCodes.enum');
 
 const createCarSchema = Joi.object({
-    brand: Joi.string()
-        .min(3)
-        .max(30)
-        .required(),
-    model: Joi.string()
-        .min(2)
-        .max(30)
-        .required(),
-    year: Joi.number()
-        .min(1900)
-        .max(CURRENT_YEAR)
-        .required(),
-    favorite: Joi.boolean()
-        .optional(),
+    brand: Joi.string().min(3).max(30).required(),
+    model: Joi.string().min(2).max(30).required(),
+    year: Joi.number().min(1900).max(CURRENT_YEAR).required(),
+    favorite: Joi.boolean().optional(),
 });
 
 const updateCarSchema = Joi.object({
-    brand: Joi.string()
-        .min(3)
-        .max(30)
-        .optional(),
-    model: Joi.string()
-        .min(2)
-        .max(30)
-        .optional(),
-    year: Joi.number()
-        .min(1900)
-        .max(CURRENT_YEAR)
-        .optional(),
+    brand: Joi.string().min(3).max(30).optional(),
+    model: Joi.string().min(2).max(30).optional(),
+    year: Joi.number().min(1900).max(CURRENT_YEAR).optional(),
 });
 
 // const updateFavorites = Joi.object({
