@@ -1,7 +1,8 @@
 module.exports = {
-    authRouter: require('./auth/auth'),
-    carsRouter: require('./cars/cars'),
-    userRouter: require('./users/users'),
+    adminRouter: require('./admin/admin.router'),
+    authRouter: require('./auth/auth.router'),
+    carsRouter: require('./cars/cars.router'),
+    userRouter: require('./users/users.router'),
 
     authValidator: require('./auth/validation'),
     carsValidator: require('./cars/validation'),

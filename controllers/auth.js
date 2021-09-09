@@ -14,7 +14,9 @@ const register = async (req, res, next) => {
 
         // first registered user is an admin
         const isFirstUser = (await Users.countDocuments({})) === 0;
-        user.role = isFirstUser ? userRolesEnum.ADMIN : userRolesEnum.USER;
+        user.role = isFirstUser
+            ? userRolesEnum.SUPER_ADMIN
+            : userRolesEnum.USER;
 
         await user.save();
 
