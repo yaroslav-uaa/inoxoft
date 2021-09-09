@@ -1,7 +1,7 @@
 const User = require('../model/Users');
 const ErrorHandler = require('../errors/errorHandler');
 
-const { STATUS_CODES, ERRORS_TEMPLATE } = require('../config');
+const { statusCodesEnum, errorTemplates } = require('../config');
 
 const isUserIdValid = async (req, res, next) => {
     try {
@@ -11,8 +11,8 @@ const isUserIdValid = async (req, res, next) => {
 
         if (!userById) {
             throw new ErrorHandler(
-                STATUS_CODES.BAD_REQUEST,
-                ERRORS_TEMPLATE.USER_CONFLICT,
+                statusCodesEnum.BAD_REQUEST,
+                errorTemplates.USER_CONFLICT,
             );
         }
 
@@ -34,7 +34,7 @@ const checkUserRole = (roleArr = []) => (req, res, next) => {
         }
 
         if (!roleArr.includes(role)) {
-            throw new ErrorHandler(STATUS_CODES.FORBIDDEN, 'Forbidden');
+            throw new ErrorHandler(statusCodesEnum.FORBIDDEN, 'Forbidden');
         }
 
         next();

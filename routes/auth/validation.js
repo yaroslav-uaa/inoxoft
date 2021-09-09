@@ -1,21 +1,25 @@
 const Joi = require('joi');
 
-const {
-    EMAIL_REGEXP,
-    PASSWORD_REGEXP,
-    NAME_REGEXP,
-} = require('../../config/constants');
+const { constants } = require('../../config');
 
 const registerSchema = Joi.object({
-    email: Joi.string().regex(EMAIL_REGEXP).trim().required(),
-    password: Joi.string().regex(PASSWORD_REGEXP).trim().required(),
-    name: Joi.string().regex(NAME_REGEXP).trim().required(),
+    email: Joi.string().regex(constants.EMAIL_REGEXP).trim().required(),
+    password: Joi.string().regex(constants.PASSWORD_REGEXP).trim().required(),
+    name: Joi.string().regex(constants.NAME_REGEXP).trim().required(),
 });
 
 const loginSchema = Joi.object({
-    email: Joi.string().regex(EMAIL_REGEXP).trim().required(),
-    password: Joi.string().regex(PASSWORD_REGEXP).trim().required(),
-    name: Joi.string().regex(NAME_REGEXP).trim().optional(),
+    email: Joi.string().regex(constants.EMAIL_REGEXP).trim().required(),
+    password: Joi.string().regex(constants.PASSWORD_REGEXP).trim().required(),
+    name: Joi.string().regex(constants.NAME_REGEXP).trim().optional(),
+});
+
+const forgotPassSchema = Joi.object({
+    email: Joi.string().regex(constants.EMAIL_REGEXP).trim().required(),
+});
+
+const resetPassSchema = Joi.object({
+    password: Joi.string().regex(constants.PASSWORD_REGEXP).trim().required(),
 });
 
 const validate = async (schema, obj, next) => {
@@ -33,5 +37,11 @@ module.exports = {
     },
     validateLogin: async (req, res, next) => {
         await validate(loginSchema, req.body, next);
+    },
+    validateForgotPass: async (req, res, next) => {
+        await validate(forgotPassSchema, req.body, next);
+    },
+    validateResetPass: async (req, res, next) => {
+        await validate(resetPassSchema, req.body, next);
     },
 };

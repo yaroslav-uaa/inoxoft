@@ -6,11 +6,11 @@ const { users } = require('../../controllers');
 
 const { validationUpdate, validateMongoId } = require('./validation');
 const { authMiddleware, userMiddleware } = require('../../middleware');
-const { tokenTypes, userRolesEnum } = require('../../config');
+const { tokenTypes, userRolesEnum, actionTypes } = require('../../config');
 
 router.get(
     '/',
-    authMiddleware.checkAccessToken(tokenTypes.ACCESS_TYPE),
+    authMiddleware.checkUserToken(actionTypes.ACCESS_TYPE, tokenTypes.ACCESS),
     users.getAllUsers,
 );
 
@@ -19,7 +19,7 @@ router.use(
     userMiddleware.getUserByDynamicParam('userId', 'params', '_id'),
     validateMongoId,
     userMiddleware.isUserIdValid,
-    authMiddleware.checkAccessToken(tokenTypes.ACCESS_TYPE),
+    authMiddleware.checkUserToken(actionTypes.ACCESS_TYPE, tokenTypes.ACCESS),
 );
 
 router

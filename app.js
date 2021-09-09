@@ -1,5 +1,5 @@
 const express = require('express');
-
+require('dotenv').config();
 const { authRouter, carsRouter, userRouter } = require('./routes/index');
 
 const _mainErrorHandler = require('./errors/mainErrorHandler');

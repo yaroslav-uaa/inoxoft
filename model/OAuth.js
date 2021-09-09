@@ -1,19 +1,18 @@
 const { Schema, SchemaTypes, model } = require('mongoose');
 
+const { dataBaseTablesEnum } = require('../config');
+
 const OAuthSchema = new Schema(
     {
         owner: {
             type: SchemaTypes.ObjectId,
-            ref: 'user',
+            ref: dataBaseTablesEnum.OWNER,
             required: true,
         },
         accessToken: {
             type: String,
         },
         refreshToken: {
-            type: String,
-        },
-        verificationToken: {
             type: String,
         },
     },
@@ -23,6 +22,6 @@ const OAuthSchema = new Schema(
     },
 );
 
-const OAuth = model('oauth', OAuthSchema);
+const OAuth = model(dataBaseTablesEnum.OAUTH, OAuthSchema);
 
 module.exports = OAuth;

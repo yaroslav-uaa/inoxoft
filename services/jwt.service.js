@@ -17,26 +17,27 @@ const generateUserTokens = () => {
     };
 };
 
-const generateVerificationToken = () => {
-    const verificationToken = jwt.sign({}, configs.SECRET_KEY_VERIFICATION, {
-        expiresIn: '7d',
-    });
-    return verificationToken;
-};
+const generateVerificationToken = () => jwt.sign({}, configs.SECRET_KEY_VERIFICATION, {
+    expiresIn: '7d',
+});
 
-const verifyToken = (token, tokenType) => {
+const generateResetToken = () => jwt.sign({}, configs.SECRET_KEY_RESET, { expiresIn: '7d' });
+
+const verifyToken = (token, actionType) => {
     try {
         let secret = '';
-
-        switch (tokenType) {
+        switch (actionType) {
             case 'access':
                 secret = configs.SECRET_KEY_ACCESS;
                 break;
-            case 'verification':
-                secret = configs.SECRET_KEY_VERIFICATION;
-                break;
             case 'refresh':
                 secret = configs.SECRET_KEY_REFRESH;
+                break;
+            case 'reset':
+                secret = configs.SECRET_KEY_RESET;
+                break;
+            case 'verification':
+                secret = configs.SECRET_KEY_VERIFICATION;
                 break;
             default:
                 throw new ErrorHandler(
@@ -44,8 +45,6 @@ const verifyToken = (token, tokenType) => {
                     errorTemplates.TOKEN_TYPE,
                 );
         }
-        console.log(secret);
-
         jwt.verify(token, secret);
     } catch (e) {
         throw new ErrorHandler(
@@ -58,5 +57,6 @@ const verifyToken = (token, tokenType) => {
 module.exports = {
     generateUserTokens,
     generateVerificationToken,
+    generateResetToken,
     verifyToken,
 };

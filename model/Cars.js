@@ -1,8 +1,4 @@
-const {
-    Schema,
-    SchemaTypes,
-    model
-} = require('mongoose');
+const { Schema, SchemaTypes, model } = require('mongoose');
 
 const carSchema = new Schema({
     brand: {
@@ -23,6 +19,7 @@ const carSchema = new Schema({
     owner: {
         type: SchemaTypes.ObjectId,
         ref: 'user',
+        required: true,
     },
     favorite: {
         type: Boolean,

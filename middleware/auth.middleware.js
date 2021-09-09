@@ -1,4 +1,4 @@
-const { Users, OAuth } = require('../model');
+const { Users, OAuth, ActionTokens } = require('../model');
 const ErrorHandler = require('../errors/errorHandler');
 
 const { statusCodesEnum, errorTemplates, constants } = require('../config');
@@ -46,30 +46,7 @@ const isValidUserData = async (req, res, next) => {
     }
 };
 
-const checkVerificationToken = (tokenType) => async (req, res, next) => {
-    try {
-        const { token } = req.params;
-
-        const dbToken = await OAuth.findOne({ verificationToken: token });
-
-        if (!dbToken) {
-            throw new ErrorHandler(
-                statusCodesEnum.NOT_FOUND,
-                errorTemplates.TOKEN_CONFLICT,
-            );
-        }
-
-        await jwtService.verifyToken(dbToken.verificationToken, tokenType);
-
-        req.token = dbToken;
-
-        next();
-    } catch (e) {
-        next(e);
-    }
-};
-
-const checkAccessToken = (tokenType) => async (req, res, next) => {
+const checkUserToken = (actionType, tokenType) => async (req, res, next) => {
     try {
         const token = req.get(constants.AUTH);
 
@@ -80,9 +57,9 @@ const checkAccessToken = (tokenType) => async (req, res, next) => {
             );
         }
 
-        await jwtService.verifyToken(token, tokenType);
+        await jwtService.verifyToken(token, actionType);
 
-        const dbToken = await OAuth.findOne({ accessToken: token });
+        const dbToken = await OAuth.findOne({ [tokenType]: token });
 
         if (!dbToken) {
             throw new ErrorHandler(
@@ -99,20 +76,11 @@ const checkAccessToken = (tokenType) => async (req, res, next) => {
     }
 };
 
-const checkRefreshToken = (tokenType) => async (req, res, next) => {
+const checkActionToken = (actionType) => async (req, res, next) => {
     try {
         const token = req.get(constants.AUTH);
 
-        if (!token) {
-            throw new ErrorHandler(
-                statusCodesEnum.NOT_FOUND,
-                errorTemplates.TOKEN_CONFLICT,
-            );
-        }
-
-        await jwtService.verifyToken(token, tokenType);
-
-        const dbToken = await OAuth.findOne({ refreshToken: token });
+        const dbToken = await ActionTokens.findOne({ token });
 
         if (!dbToken) {
             throw new ErrorHandler(
@@ -120,6 +88,8 @@ const checkRefreshToken = (tokenType) => async (req, res, next) => {
                 errorTemplates.TOKEN_CONFLICT,
             );
         }
+
+        await jwtService.verifyToken(dbToken.token, actionType);
 
         req.token = dbToken;
 
@@ -130,9 +100,8 @@ const checkRefreshToken = (tokenType) => async (req, res, next) => {
 };
 
 module.exports = {
-    checkAccessToken,
-    checkRefreshToken,
-    checkVerificationToken,
+    checkUserToken,
+    checkActionToken,
     isEmailExist,
     isValidUserData,
 };

@@ -1,20 +1,19 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
-const { CURRENT_YEAR } = require('../../config/constants');
-const { BAD_REQUEST } = require('../../config/statusCodes.enum');
+const { constants, statusCodesEnum } = require('../../config');
 
 const createCarSchema = Joi.object({
     brand: Joi.string().min(3).max(30).required(),
     model: Joi.string().min(2).max(30).required(),
-    year: Joi.number().min(1900).max(CURRENT_YEAR).required(),
+    year: Joi.number().min(1900).max(constants.CURRENT_YEAR).required(),
     favorite: Joi.boolean().optional(),
 });
 
 const updateCarSchema = Joi.object({
     brand: Joi.string().min(3).max(30).optional(),
     model: Joi.string().min(2).max(30).optional(),
-    year: Joi.number().min(1900).max(CURRENT_YEAR).optional(),
+    year: Joi.number().min(1900).max(constants.CURRENT_YEAR).optional(),
 });
 
 // const updateFavorites = Joi.object({
@@ -37,7 +36,7 @@ module.exports = {
     validateMongoId: (req, res, next) => {
         if (!mongoose.Types.ObjectId.isValid(req.params.carId)) {
             return next({
-                status: BAD_REQUEST,
+                status: statusCodesEnum.BAD_REQUEST,
                 message: 'Invalid ObjectId',
             });
         }

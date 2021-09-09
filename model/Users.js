@@ -31,6 +31,9 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
+        passwordReset: {
+            type: Date,
+        },
     },
     {
         versionKey: false,

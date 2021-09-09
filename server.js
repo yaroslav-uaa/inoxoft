@@ -1,7 +1,7 @@
+require('dotenv').config();
+
 const app = require('./app');
 const db = require('./model/db');
-
-require('dotenv').config();
 
 const { PORT } = process.env;
 
