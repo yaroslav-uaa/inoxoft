@@ -1,6 +1,8 @@
 const User = require('../model/Users');
 
 const userNormalize = require('../utils/user.utils');
+const { cloudUpload } = require('../services');
+const { statusCodesEnum } = require('../config');
 
 const getAllUsers = async (req, res, next) => {
     try {
@@ -55,9 +57,33 @@ const updateUserAccount = async (req, res, next) => {
     }
 };
 
+const uploadAvatar = async (req, res, next) => {
+    try {
+        const { avatar } = req.files;
+        let { user } = req;
+
+        if (avatar) {
+            const { _id } = user;
+            const uploadFile = await cloudUpload.upload(avatar, 'user', _id);
+
+            user = await User.findByIdAndUpdate(
+                _id,
+                { avatar: uploadFile.Location },
+                { new: true },
+            );
+        }
+        res.status(statusCodesEnum.OK).json({
+            user,
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
 module.exports = {
     getAllUsers,
     getCurrentUser,
     deleteUserAccount,
     updateUserAccount,
+    uploadAvatar,
 };

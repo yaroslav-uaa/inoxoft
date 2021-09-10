@@ -2,7 +2,8 @@ const nodemailer = require('nodemailer');
 const { configs } = require('../config');
 
 class CreateSender {
-    static send(msg) {
+    // eslint-disable-next-line class-methods-use-this
+    send(msg) {
         const config = {
             host: 'smtp.meta.ua',
             port: 465,

@@ -9,6 +9,11 @@ const { tokenTypes, userRolesEnum, actionTypes } = require('../../config');
 router.get(
     '/',
     authMiddleware.checkUserToken(actionTypes.ACCESS_TYPE, tokenTypes.ACCESS),
+    userMiddleware.getUserByDynamicParam('userId', 'token', 'owner'),
+    userMiddleware.checkUserRole([
+        userRolesEnum.SUPER_ADMIN,
+        userRolesEnum.ADMIN,
+    ]),
     users.getAllUsers,
 );
 
@@ -24,14 +29,29 @@ router
     .get('/:userId', users.getCurrentUser)
     .delete(
         '/:userId',
-        userMiddleware.checkUserRole([userRolesEnum.ADMIN]),
+        userMiddleware.checkUserRole([
+            userRolesEnum.SUPER_ADMIN,
+            userRolesEnum.ADMIN,
+        ]),
         users.deleteUserAccount,
     )
     .put(
         '/:userId',
-        userMiddleware.checkUserRole([userRolesEnum.ADMIN]),
+        userMiddleware.checkUserRole([
+            userRolesEnum.SUPER_ADMIN,
+            userRolesEnum.ADMIN,
+        ]),
         validationUpdate,
         users.updateUserAccount,
+    )
+    .patch(
+        '/:userId/avatars',
+        authMiddleware.checkUserToken(
+            actionTypes.ACCESS_TYPE,
+            tokenTypes.ACCESS,
+        ),
+        userMiddleware.getUserByDynamicParam('userId', 'token', 'owner'),
+        users.uploadAvatar,
     );
 
 module.exports = router;

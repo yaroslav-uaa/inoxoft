@@ -140,6 +140,7 @@ const resetPassword = async (req, res, next) => {
         const user = await Users.findById(owner);
 
         user.password = password;
+        user.passwordReset = new Date();
         await user.save();
 
         await ActionTokens.deleteOne({ token });

@@ -18,7 +18,7 @@ router.post(
 );
 
 router.post(
-    '/verify/:token',
+    '/verify',
     authMiddleware.checkActionToken(actionTypes.VERIFICATION_TYPE),
     auth.verify,
 );

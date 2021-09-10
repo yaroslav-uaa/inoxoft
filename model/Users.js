@@ -27,6 +27,9 @@ const userSchema = new Schema(
             default: userRolesEnum.USER,
             enum: Object.values(userRolesEnum),
         },
+        avatar: {
+            type: String,
+        },
         verified: {
             type: Boolean,
             default: false,
