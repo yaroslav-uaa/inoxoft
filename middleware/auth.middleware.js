@@ -78,7 +78,7 @@ const checkUserToken = (actionType, tokenType) => async (req, res, next) => {
 
 const checkActionToken = (actionType) => async (req, res, next) => {
     try {
-        const token = req.get(constants.AUTH);
+        const { token } = req.query;
 
         const dbToken = await ActionTokens.findOne({ token });
 

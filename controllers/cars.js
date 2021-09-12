@@ -2,9 +2,13 @@ const Car = require('../model/Cars');
 
 const getAll = async (req, res, next) => {
     try {
-        const { userId } = req.query;
+        const { owner } = req.token;
+        const { perPage, page } = req.query;
 
-        const cars = await Car.find({ owner: userId });
+        const cars = await Car.find({ owner })
+            .limit(+perPage)
+            .skip((page - 1) * perPage);
+
         res.json({
             cars,
         });

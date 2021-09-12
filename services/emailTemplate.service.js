@@ -24,7 +24,7 @@ class EmailService {
                     button: {
                         color: '#7427F3',
                         text: 'Confirm your account',
-                        link: `${this.link}/verify/${token}`,
+                        link: `${this.link}/verify?token=${token}`,
                     },
                 },
             },
@@ -42,7 +42,7 @@ class EmailService {
         await this.sender.send(msg);
     }
 
-    createTemplateResetPassword(resetToken) {
+    createTemplateResetPassword(token) {
         const mailGenerator = new Mailgen({
             theme: 'salted',
             textDirection: 'rtl',
@@ -60,7 +60,7 @@ class EmailService {
                     button: {
                         color: '#7427F3',
                         text: 'RESET',
-                        link: `${this.link}/reset-password?resettoken=${resetToken}`,
+                        link: `${this.link}/reset-password?token=${token}`,
                     },
                 },
             },
@@ -68,8 +68,8 @@ class EmailService {
         return mailGenerator.generate(passwordResetEmail);
     }
 
-    async sendResetPasswordEmail(resetToken, passwordResetEmail) {
-        const emailHtml = this.createTemplateResetPassword(resetToken);
+    async sendResetPasswordEmail(token, passwordResetEmail) {
+        const emailHtml = this.createTemplateResetPassword(token);
         const msg = {
             to: passwordResetEmail,
             subject: 'Reset password for your account',
