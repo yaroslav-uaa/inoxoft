@@ -58,8 +58,8 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
             example:
+              email: shelby@example.com
               password: Qwe34567!
-              email: shelby1234@ukr.net
       responses:
         200:
           description: You sign in successfully
@@ -103,7 +103,7 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
             example:
-              email: shelby1234@ukr.net
+              email: shelby@example.com
       responses:
         200:
           description: Please check your email for password reset instructions
@@ -151,9 +151,9 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
             example:
+              email: shelby@example.com
               password: Qwe34567!
-              email: shelby4321@ukr.net
-              name: Nataly
+              name: Nataly Shelby
       responses:
         201:
           description: Create successful, admin user can check his email for reset password instructions
@@ -213,8 +213,8 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
             example:
-              email: shelby4321@ukr.net
-              name: Nataly
+              email: shelby4321@example.com
+              name: Nataly Shelby
       responses:
         200:
           description: Update user's information successfull
@@ -248,19 +248,32 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
             example:
-              email: shelby1234@ukr.net
+              email: shelby1234@example.com
   /users/{userId}/avatars:
-    security:
-      - bearerAuth: [ ]
     patch:
+      security:
+        - bearerAuth: [ ]
       summary: Upload user's avatar
       tags: [ User ]
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User's id
       requestBody:
         content:
-          image/png:
+          multipart/form-data:
             schema:
-              type: string
-              format: binary
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  example: avatar
+                fileName:
+                  type: string
+                  format: binary
       responses:
         200:
           description: Upload Successful
@@ -438,14 +451,9 @@ components:
           type: date
           description: The time of resetting password
       example:
-        _id: 613de8f93e99f21ddf9252q5
-        email: shelby@gmail.com
+        email: shelby@example.com
         password: Qwe34567!
-        name: Thomas
-        role: admin
-        avatar: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.discogs.com%2Fru%2Fartist%2F519087-Monica-Bellucci&psig=AOvVaw2zfNmGVtb19fCjIW9NJkcT&ust=1631908259466000&source=images&cd=vfe&ved=2ahUKEwj41ZSSooTzAhVCxCoKHbbRAK0QjRx6BAgAEAk'
-        verified: true
-        passwordReset: date time
+        name: Thomas Shelby
     Car:
       type: object
       required:
