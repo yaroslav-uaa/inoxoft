@@ -40,6 +40,7 @@ const deleteUserAccount = async (req, res, next) => {
         next(e);
     }
 };
+
 const updateUserAccount = async (req, res, next) => {
     try {
         const user = await User.findOneAndUpdate(

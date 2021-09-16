@@ -27,7 +27,7 @@ const createAdmin = async (req, res, next) => {
         return res.json({
             user,
             message:
-                "Create successful, admin user can check his email for reset password instructions'",
+                'Create successful, admin user can check his email for reset password instructions',
         });
     } catch (e) {
         next(e);

@@ -6,6 +6,7 @@ const getAll = async (req, res, next) => {
         const { perPage, page } = req.query;
 
         const cars = await Car.find({ owner })
+            .sort({ brand: 1 })
             .limit(+perPage)
             .skip((page - 1) * perPage);
 

@@ -48,14 +48,16 @@ const isValidUserData = async (req, res, next) => {
 
 const checkUserToken = (actionType, tokenType) => async (req, res, next) => {
     try {
-        const token = req.get(constants.AUTH);
+        const headerAuth = req.get(constants.AUTH);
 
-        if (!token) {
+        if (!headerAuth) {
             throw new ErrorHandler(
                 statusCodesEnum.NOT_FOUND,
                 errorTemplates.TOKEN_CONFLICT,
             );
         }
+
+        const token = headerAuth.split(' ')[1];
 
         await jwtService.verifyToken(token, actionType);
 

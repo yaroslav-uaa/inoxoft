@@ -27,6 +27,8 @@ app.use(cors({ origin: _configureCors }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(rateLimit(limiterAPI));
+app.use('/docs', require('./docs/swagger'));
+
 app.use('/', authRouter);
 app.use('/admin', adminRouter);
 app.use('/users', userRouter);

@@ -14,7 +14,7 @@ router
     .post('/', carsValidator.validateCreateCar, cars.add);
 
 router.use(
-    '/:cardId',
+    '/:carId',
     carsValidator.validateMongoId,
     carMiddleware.isCarIdValid,
     authMiddleware.checkUserToken(actionTypes.ACCESS_TYPE, tokenTypes.ACCESS),
