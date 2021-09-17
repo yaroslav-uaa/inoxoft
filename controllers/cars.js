@@ -1,14 +1,11 @@
 const Car = require('../model/Cars');
+const { carService } = require('../services');
 
 const getAll = async (req, res, next) => {
     try {
-        const { owner } = req.token;
-        const { perPage, page } = req.query;
+        const { query } = req;
 
-        const cars = await Car.find({ owner })
-            .sort({ brand: 1 })
-            .limit(+perPage)
-            .skip((page - 1) * perPage);
+        const cars = await carService.findAll(query);
 
         res.json({
             cars,
