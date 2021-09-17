@@ -4,6 +4,7 @@ const { INTERNAL_SERVER_ERROR } = require('../config/statusCodes.enum');
 const _mainErrorHandler = (err, req, res, next) => {
     res.status(err.status || INTERNAL_SERVER_ERROR).json({
         message: err.message || 'Unknown error',
+        data: err.data,
     });
 };
 

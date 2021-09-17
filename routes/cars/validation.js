@@ -2,6 +2,7 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 
 const { constants, statusCodesEnum } = require('../../config');
+const { Sentry } = require('../../logs/Sentry');
 
 const createCarSchema = Joi.object({
     brand: Joi.string().min(3).max(30).required(),
@@ -25,6 +26,7 @@ const validate = async (schema, obj, next) => {
         await schema.validateAsync(obj);
         next();
     } catch (err) {
+        Sentry.captureException(err);
         next({ message: err.message.replace(/"/g, '') });
     }
 };

@@ -3,6 +3,7 @@ const Joi = require('joi');
 
 const { EMAIL_REGEXP, NAME_REGEXP } = require('../../config/constants');
 const { BAD_REQUEST } = require('../../config/statusCodes.enum');
+const { Sentry } = require('../../logs/Sentry');
 
 const updateUserSchema = Joi.object({
     email: Joi.string().regex(EMAIL_REGEXP).trim().optional(),
@@ -14,6 +15,7 @@ const validate = async (schema, obj, next) => {
         await schema.validateAsync(obj);
         next();
     } catch (err) {
+        Sentry.captureException(err);
         next({ message: err.message.replace(/"/g, '') });
     }
 };

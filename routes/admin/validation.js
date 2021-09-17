@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
 const { constants } = require('../../config');
+const { Sentry } = require('../../logs/Sentry');
 
 const createAdminSchema = Joi.object({
     email: Joi.string().regex(constants.EMAIL_REGEXP).trim().required(),
@@ -13,6 +14,7 @@ const validate = async (schema, obj, next) => {
         await schema.validateAsync(obj);
         next();
     } catch (err) {
+        Sentry.captureException(err);
         next({ message: err.message.replace(/"/g, '') });
     }
 };
