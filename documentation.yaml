@@ -1,0 +1,488 @@
+openapi: '3.0.0'
+info:
+  title: 'Inoxoft Cars API'
+  version: '1.0.0'
+  description: A simple Express API build with MongoDB
+  contact:
+    name: INOXOFT FAMILY
+    email: contact@inoxoft.com
+    url: https://inoxoft.com/about-us/
+
+servers:
+  - url: 'http://localhost:5000'
+    description: Local development server
+
+paths:
+  /signup:
+    post:
+      summary: SignUp new user in to app
+      tags: [ Authorization ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: You registered successfully
+        409:
+          description: Email is already used
+        500:
+          description: System error
+  /verify:
+    post:
+      summary: Verify new user's email
+      tags: [ Authorization ]
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: Verification token
+      responses:
+        201:
+          description: You registered successfully
+        409:
+          description: Email is already used
+        500:
+          description: System error
+  /signin:
+    post:
+      summary: Sign in to app
+      tags: [ Authorization ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              email: shelby@example.com
+              password: Qwe34567!
+      responses:
+        200:
+          description: You sign in successfully
+        401:
+          description: Invalid login or password
+  /signout:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Sign out from app
+      tags: [ Authorization ]
+      responses:
+        204:
+          description: Successful logout
+        401:
+          description: Token is lost in header
+        500:
+          description: System error
+  /refresh:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Refresh user's tokens
+      tags: [ Authorization ]
+      responses:
+        200:
+          description: Successful refresh user's tokens
+        401:
+          description: Invalid token
+        500:
+          description: System error
+  /forgot-password:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Send email for reset password
+      tags: [ Authorization ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              email: shelby@example.com
+      responses:
+        200:
+          description: Please check your email for password reset instructions
+        400:
+          description: Invalid email
+        500:
+          description: System error
+  /reset-password:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Reset user's password
+      tags: [ Authorization ]
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: User's resetToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              password: Qwe34567!
+      responses:
+        200:
+          description: Successful reset password
+        401:
+          description: Invalid token
+        500:
+          description: System error
+  /admin:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Create new admin accounts
+      tags: [ Admin ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              email: shelby@example.com
+              password: Qwe34567!
+              name: Nataly Shelby
+      responses:
+        201:
+          description: Create successful, admin user can check his email for reset password instructions
+        409:
+          description: Email is already used
+        500:
+          description: System error
+  /users:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: List of user's accounts
+      tags: [ Admin ]
+      responses:
+        201:
+          description: List of users
+        400:
+          description: Bad Request
+        500:
+          description: System error
+  /users/{userId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Get current user
+      tags: [ User ]
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User's id
+      responses:
+        200:
+          description: Find your information
+        401:
+          description: Lost token in header
+        500:
+          description: System error
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: Update user
+      tags: [ Admin ]
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User's id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              email: shelby4321@example.com
+              name: Nataly Shelby
+      responses:
+        200:
+          description: Update user's information successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          description: Lost token in header
+        500:
+          description: System error
+    delete:
+      security:
+        - bearerAuth: [ ]
+      summary: Delete user by id
+      tags: [ Admin ]
+      parameters:
+        - in: query
+          name:
+          schema:
+            type: string
+          required: true
+          description: Owner's id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              email: shelby1234@example.com
+  /users/{userId}/avatars:
+    patch:
+      security:
+        - bearerAuth: [ ]
+      summary: Upload user's avatar
+      tags: [ User ]
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User's id
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  example: avatar
+                fileName:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Upload Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Bad Request
+        500:
+          description: System error
+  /cars:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Returns the list of all the cars
+      tags: [ Car ]
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: Owner's id
+      responses:
+        200:
+          description: The list of the cars
+        401:
+          description: Unauthorized
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Add a new car
+      tags: [ Car ]
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: Owner's id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+      responses:
+        200:
+          description: The car was successfully created
+        401:
+          description: Unauthorized
+        500:
+          description: Some server error
+  /cars/{carsId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Get the car by id
+      tags: [ Car ]
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: Owner's id
+        - in: path
+          name: carsId
+          schema:
+            type: string
+          required: true
+          description: The car id
+      responses:
+        200:
+          description: The car description by id
+        401:
+          description: Unauthorized
+        404:
+          description: The car was not found
+    delete:
+      security:
+        - bearerAuth: [ ]
+      summary: Delete the car by id
+      tags: [ Car ]
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: Owner's id
+        - in: path
+          name: carsId
+          schema:
+            type: string
+          required: true
+          description: The car id
+      responses:
+        200:
+          description: car deleted
+        401:
+          description: Unauthorized
+        404:
+          description: The car was not found
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: update the car by id
+      tags: [ Car ]
+      parameters:
+        - in: query
+          name: userId
+          owner: userId
+          schema:
+            type: string
+          required: true
+          description: The owner's id
+        - in: path
+          name: carsId
+          id: cardId
+          schema:
+            type: string
+          required: true
+          description: The car id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+      responses:
+        200:
+          description: The car was updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        401:
+          description: Unauthorized
+        404:
+          description: The car was not found
+        500:
+          description: Some error happened
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - password
+        - email
+      properties:
+        _id:
+          type: string
+          description: The auto-generated id of the user
+        password:
+          type: string
+          description: The password of user`s account
+        email:
+          type: string
+          description: The email address
+        role:
+          type: string
+          description: The user's role
+        avatar:
+          type: string
+          description: The user`s avatar
+        verified:
+          type: boolean
+          description: Verification value of user`s email
+        passwordReset:
+          type: date
+          description: The time of resetting password
+      example:
+        email: shelby@example.com
+        password: Qwe34567!
+        name: Thomas Shelby
+    Car:
+      type: object
+      required:
+        - brand
+        - model
+        - year
+      properties:
+        id:
+          type: string
+          description: The auto-generated id of the cars
+        brand:
+          type: string
+          description: The brand of create car
+        model:
+          type: string
+          description: The model of car
+        year:
+          type: Boolean
+          description: Year of production car
+        owner:
+          type: id
+          description: User`s id
+      example:
+        brand: Audi
+        model: rs8
+        year: 2021
+        owner: 613de8f93e99f21ddf9252a1
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

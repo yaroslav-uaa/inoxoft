@@ -1,0 +1,76 @@
+{
+  "name": "simple-api",
+  "version": "1.0.0",
+  "description": "hw9-inoxoft",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yaroslav-uaa/inoxoft.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "ya_ua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yaroslav-uaa/inoxoft/issues"
+  },
+  "homepage": "https://github.com/yaroslav-uaa/inoxoft#readme",
+  "dependencies": {
+    "@sentry/node": "^6.12.0",
+    "@sentry/tracing": "^6.12.0",
+    "aws-sdk": "^2.987.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dayjs": "^1.10.7",
+    "dayjs-plugin-utc": "^0.1.2",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "express-handlebars": "^5.3.3",
+    "express-rate-limit": "^5.3.0",
+    "helmet": "^4.6.0",
+    "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "mailgen": "^2.0.15",
+    "mongodb": "^4.1.1",
+    "mongoose": "^6.0.2",
+    "morgan": "^1.10.0",
+    "node-cron": "^3.0.0",
+    "nodemailer": "^6.6.3",
+    "swagger-ui-express": "^4.1.6",
+    "uuid": "^8.3.2",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.4",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-rallycoding": "^3.2.0",
+    "eslint-plugin-import": "^2.24.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "husky": "4.3.1",
+    "lint-staged": "^11.1.2",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.3.2"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
