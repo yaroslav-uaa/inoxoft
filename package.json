@@ -1,7 +1,7 @@
 {
   "name": "simple-api",
   "version": "1.0.0",
-  "description": "hw9-inoxoft",
+  "description": "be-4this_gen",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
