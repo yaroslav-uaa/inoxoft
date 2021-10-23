@@ -6,13 +6,17 @@ const { authMiddleware, carMiddleware } = require('../../middleware');
 const { actionTypes, tokenTypes } = require('../../config');
 const upload = require('../../helpers/upload');
 
-router.use(
-    '/',
-    authMiddleware.checkUserToken(actionTypes.ACCESS_TYPE, tokenTypes.ACCESS),
-);
 router
     .get('/', cars.getAll)
-    .post('/', carsValidator.validateCreateCar, cars.add);
+    .post(
+        '/',
+        authMiddleware.checkUserToken(
+            actionTypes.ACCESS_TYPE,
+            tokenTypes.ACCESS,
+        ),
+        carsValidator.validateCreateCar,
+        cars.add,
+    );
 
 router.use(
     '/:carId',
