@@ -5,7 +5,7 @@ const { statusCodesEnum, configs, errorTemplates } = require('../config');
 
 const generateUserTokens = () => {
     const accessToken = jwt.sign({}, configs.SECRET_KEY_ACCESS, {
-        expiresIn: '15m',
+        expiresIn: '15d',
     });
     const refreshToken = jwt.sign({}, configs.SECRET_KEY_REFRESH, {
         expiresIn: '31d',
@@ -17,11 +17,13 @@ const generateUserTokens = () => {
     };
 };
 
-const generateVerificationToken = () => jwt.sign({}, configs.SECRET_KEY_VERIFICATION, {
-    expiresIn: '7d',
-});
+const generateVerificationToken = () =>
+    jwt.sign({}, configs.SECRET_KEY_VERIFICATION, {
+        expiresIn: '7d',
+    });
 
-const generateResetToken = () => jwt.sign({}, configs.SECRET_KEY_RESET, { expiresIn: '7d' });
+const generateResetToken = () =>
+    jwt.sign({}, configs.SECRET_KEY_RESET, { expiresIn: '7d' });
 
 const verifyToken = (token, actionType) => {
     try {

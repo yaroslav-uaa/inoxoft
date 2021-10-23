@@ -4,6 +4,7 @@ const { cars } = require('../../controllers');
 const carsValidator = require('./validation');
 const { authMiddleware, carMiddleware } = require('../../middleware');
 const { actionTypes, tokenTypes } = require('../../config');
+const upload = require('../../helpers/upload');
 
 router.use(
     '/',
@@ -22,6 +23,7 @@ router.use(
 router
     .get('/:carId', cars.getThis)
     .delete('/:carId', cars.remove)
-    .put('/:carId', carsValidator.validateUpdateCar, cars.update);
+    .put('/:carId', carsValidator.validateUpdateCar, cars.update)
+    .patch('/:carId/avatars', upload.single('avatar'), cars.uploadImg);
 
 module.exports = router;

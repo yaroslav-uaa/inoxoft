@@ -19,11 +19,24 @@ const carSchema = new Schema({
     owner: {
         type: SchemaTypes.ObjectId,
         ref: 'user',
-        required: true,
     },
     favorite: {
         type: Boolean,
         default: false,
+    },
+    dateCreate: {
+        type: Date,
+        default: Date.now(),
+    },
+    description: {
+        type: String,
+    },
+    avatar: {
+        type: String,
+    },
+    idCloudAvatar: {
+        type: String,
+        default: null,
     },
 });
 

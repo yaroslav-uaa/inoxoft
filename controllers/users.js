@@ -1,7 +1,8 @@
 const User = require('../model/Users');
+const fs = require('fs/promises');
 
 const userNormalize = require('../utils/user.utils');
-const { cloudUpload } = require('../services');
+const { UploadService } = require('../services');
 const { statusCodesEnum } = require('../config');
 
 const getAllUsers = async (req, res, next) => {
@@ -60,22 +61,23 @@ const updateUserAccount = async (req, res, next) => {
 
 const uploadAvatar = async (req, res, next) => {
     try {
-        const { avatar } = req.files;
-        let { user } = req;
+        const { path } = req.file;
 
-        if (avatar) {
-            const { _id } = user;
-            const uploadFile = await cloudUpload.upload(avatar, 'user', _id);
+        const uploads = new UploadService();
 
-            user = await User.findByIdAndUpdate(
-                _id,
-                { avatar: uploadFile.Location },
-                { new: true },
-            );
-        }
-        res.status(statusCodesEnum.OK).json({
-            user,
-        });
+        const { idCloudAvatar, avatarURL } = await uploads.saveAvatar(
+            path,
+            req.user.idCloudAvatar,
+        );
+
+        await fs.unlink(path);
+
+        const user = await User.updateOne(
+            { _id: req.params.userId },
+            { avatar: avatarURL, idCloudAvatar },
+            { new: true },
+        );
+        res.json({ user });
     } catch (e) {
         next(e);
     }

@@ -1,5 +1,8 @@
 const Car = require('../model/Cars');
-const { carService } = require('../services');
+const { carService, UploadService } = require('../services');
+
+const { statusCodesEnum } = require('../config');
+const fs = require('fs/promises');
 
 const getAll = async (req, res, next) => {
     try {
@@ -79,10 +82,35 @@ const remove = async (req, res, next) => {
     }
 };
 
+const uploadImg = async (req, res, next) => {
+    try {
+        const { path } = req.file;
+        const { carId } = req.params;
+
+        const uploads = new UploadService();
+        const { idCloudAvatar, avatarURL } = await uploads.saveAvatar(
+            path,
+            req.car.idCloudAvatar,
+        );
+
+        await fs.unlink(path);
+
+        const car = await Car.updateOne(
+            { _id: carId },
+            { avatar: avatarURL, idCloudAvatar },
+            { new: true },
+        );
+        res.json({ car });
+    } catch (e) {
+        next(e);
+    }
+};
+
 module.exports = {
     getAll,
     getThis,
     add,
     update,
     remove,
+    uploadImg,
 };

@@ -5,6 +5,7 @@ const { users } = require('../../controllers');
 const { validationUpdate, validateMongoId } = require('./validation');
 const { authMiddleware, userMiddleware } = require('../../middleware');
 const { tokenTypes, userRolesEnum, actionTypes } = require('../../config');
+const upload = require('../../helpers/upload');
 
 router.get(
     '/',
@@ -50,7 +51,7 @@ router
             actionTypes.ACCESS_TYPE,
             tokenTypes.ACCESS,
         ),
-        userMiddleware.getUserByDynamicParam('userId', 'token', 'owner'),
+        upload.single('avatar'),
         users.uploadAvatar,
     );
 

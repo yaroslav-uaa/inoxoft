@@ -1,39 +1,25 @@
-const S3 = require('aws-sdk/clients/s3');
-const { v4: uuid } = require('uuid');
-const path = require('path');
+const cloudinary = require('cloudinary').v2;
+const { promisify } = require('util');
+require('dotenv').config();
 
-const {
-    AWS_S3_ACCESS_KEY,
-    AWS_S3_NAME,
-    AWS_S3_REGION,
-    AWS_S3_SECRET_KEY,
-} = require('../config/configs');
-
-const bucket = new S3({
-    region: AWS_S3_REGION,
-    accessKeyId: AWS_S3_ACCESS_KEY,
-    secretAccessKey: AWS_S3_SECRET_KEY,
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY_ClOUDINARY,
+    api_secret: process.env.API_SECRET_ClOUDINARY,
 });
 
-const _fileNameBuilder = (fileName, itemType, itemId) => {
-    const fileExtension = fileName.split('.').pop();
+const uploadCloud = promisify(cloudinary.uploader.upload);
 
-    return path.join(itemType, itemId, ` ${uuid()}.${fileExtension}`);
-};
+class UploadService {
+    async saveAvatar(pathFile, oldIdCloudAvatar) {
+        const { public_id: idCloudAvatar, secure_url: avatarURL } =
+            await uploadCloud(pathFile, {
+                public_id: oldIdCloudAvatar?.replace('avatarCloud/', ''),
+                folder: 'avatarCloud',
+                transformation: { width: 250, height: 250, crop: 'pad' },
+            });
+        return { idCloudAvatar, avatarURL };
+    }
+}
 
-const upload = (file, itemType, itemId) => {
-    const { data, name } = file;
-    const uploadPath = _fileNameBuilder(name, itemType, itemId.toString());
-
-    return bucket
-        .upload({
-            Bucket: AWS_S3_NAME,
-            Body: data,
-            Key: uploadPath,
-        })
-        .promise();
-};
-
-module.exports = {
-    upload,
-};
+module.exports = UploadService;
