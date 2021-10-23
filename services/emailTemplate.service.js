@@ -11,16 +11,16 @@ class EmailService {
         const mailGenerator = new Mailgen({
             theme: 'neopolitan',
             product: {
-                name: 'Inoxoft Cars System',
+                name: '4this.gen Cars System',
                 link: this.link,
             },
         });
         const email = {
             body: {
-                intro: "Welcome to Inoxoft Cars System! We're very excited to have you on board.",
+                intro: "Welcome to 4this.gen Cars System! We're very excited to have you on board.",
                 action: {
                     instructions:
-                        'To get started with Inoxoft Cars System, please click here:',
+                        'To get started with 4this.gen Cars System, please click here:',
                     button: {
                         color: '#7427F3',
                         text: 'Confirm your account',
@@ -47,7 +47,7 @@ class EmailService {
             theme: 'salted',
             textDirection: 'rtl',
             product: {
-                name: 'Inoxoft Cars System',
+                name: '4this.gen Cars System',
                 link: this.link,
             },
         });
