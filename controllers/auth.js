@@ -32,7 +32,7 @@ const register = async (req, res, next) => {
         return res.json({
             normalizedUser,
             message:
-                "Registration successful, please check your email for verification instructions'",
+                'Registration successful, please check your email for verification instructions',
         });
     } catch (e) {
         next(e);

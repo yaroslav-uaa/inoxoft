@@ -8,6 +8,8 @@ const createCarSchema = Joi.object({
     brand: Joi.string().min(3).max(30).required(),
     model: Joi.string().min(2).max(30).required(),
     year: Joi.number().min(1900).max(constants.CURRENT_YEAR).required(),
+    avatar: Joi.string().min(3).max(700).optional(),
+    description: Joi.string().min(3).max(7000).optional(),
     favorite: Joi.boolean().optional(),
 });
 
@@ -32,8 +34,10 @@ const validate = async (schema, obj, next) => {
 };
 
 module.exports = {
-    validateCreateCar: (req, res, next) => validate(createCarSchema, req.body, next),
-    validateUpdateCar: (req, res, next) => validate(updateCarSchema, req.body, next),
+    validateCreateCar: (req, res, next) =>
+        validate(createCarSchema, req.body, next),
+    validateUpdateCar: (req, res, next) =>
+        validate(updateCarSchema, req.body, next),
     // validateUpdateFavorites: (req, res, next) => validate(updateFavorites, req.body, next),
     validateMongoId: (req, res, next) => {
         if (!mongoose.Types.ObjectId.isValid(req.params.carId)) {
