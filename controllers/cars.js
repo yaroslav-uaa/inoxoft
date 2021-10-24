@@ -1,8 +1,9 @@
 const Car = require('../model/Cars');
 const { carService, UploadService } = require('../services');
 
-const { statusCodesEnum } = require('../config');
+const { statusCodesEnum, STATUS_CODES, ERRORS_TEMPLATE } = require('../config');
 const fs = require('fs/promises');
+const ErrorHandler = require('../errors/errorHandler');
 
 const getAll = async (req, res, next) => {
     try {
@@ -19,11 +20,21 @@ const getAll = async (req, res, next) => {
 };
 
 // eslint-disable-next-line require-await
-const getThis = (req, res, next) => {
+const getThis = async (req, res, next) => {
     try {
-        const { car } = req;
+        const { carId } = req.params;
 
-        res.json({ car });
+        const carById = await Car.findOne({
+            _id: carId,
+        });
+
+        if (!carById) {
+            throw new ErrorHandler(
+                STATUS_CODES.BAD_REQUEST,
+                ERRORS_TEMPLATE.CAR_ID_CONFLICT,
+            );
+        }
+        res.json({ carById });
     } catch (e) {
         next(e);
     }

@@ -14,7 +14,6 @@ const isCarIdValid = async (req, res, next) => {
             owner: userId,
         });
 
-        console.log(carById);
         if (!carById) {
             throw new ErrorHandler(
                 STATUS_CODES.BAD_REQUEST,

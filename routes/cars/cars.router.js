@@ -17,6 +17,7 @@ router
         carsValidator.validateCreateCar,
         cars.add,
     );
+router.get('/:carId', cars.getThis);
 
 router.use(
     '/:carId',
@@ -25,7 +26,6 @@ router.use(
     authMiddleware.checkUserToken(actionTypes.ACCESS_TYPE, tokenTypes.ACCESS),
 );
 router
-    .get('/:carId', cars.getThis)
     .delete('/:carId', cars.remove)
     .put('/:carId', carsValidator.validateUpdateCar, cars.update)
     .patch('/:carId/avatars', upload.single('avatar'), cars.uploadImg);
