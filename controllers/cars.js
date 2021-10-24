@@ -75,6 +75,22 @@ const update = async (req, res, next) => {
     }
 };
 
+const removeByAdmin = async (req, res, next) => {
+    try {
+        const { carId } = req.params;
+
+        await Car.findOneAndDelete({
+            _id: carId,
+        });
+
+        res.json({
+            message: 'Delete successfully',
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
 const remove = async (req, res, next) => {
     try {
         const { userId } = req.query;
@@ -124,4 +140,5 @@ module.exports = {
     update,
     remove,
     uploadImg,
+    removeByAdmin,
 };

@@ -2,8 +2,12 @@ const router = require('express').Router();
 
 const { cars } = require('../../controllers');
 const carsValidator = require('./validation');
-const { authMiddleware, carMiddleware } = require('../../middleware');
-const { actionTypes, tokenTypes } = require('../../config');
+const {
+    authMiddleware,
+    carMiddleware,
+    userMiddleware,
+} = require('../../middleware');
+const { actionTypes, tokenTypes, userRolesEnum } = require('../../config');
 const upload = require('../../helpers/upload');
 
 router
@@ -18,6 +22,18 @@ router
         cars.add,
     );
 router.get('/:carId', cars.getThis);
+
+//Admin route
+router.delete(
+    '/:carId',
+    authMiddleware.checkUserToken(actionTypes.ACCESS_TYPE, tokenTypes.ACCESS),
+    userMiddleware.getUserByDynamicParam('token', 'body', 'owner'),
+    userMiddleware.checkUserRole([
+        userRolesEnum.SUPER_ADMIN,
+        userRolesEnum.ADMIN,
+    ]),
+    cars.removeByAdmin,
+);
 
 router.use(
     '/:carId',
