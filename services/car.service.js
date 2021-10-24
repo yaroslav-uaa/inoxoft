@@ -3,7 +3,7 @@ const Car = require('../model/Cars');
 module.exports = {
     findAll: async (query = {}) => {
         const {
-            perPage = 10,
+            perPage = 30,
             page = 1,
             sortBy = 'createdAt',
             order = 'asc',
@@ -17,7 +17,7 @@ module.exports = {
         const filterObject = {};
         const yearFilter = {};
 
-        Object.keys(filters).forEach((key) => {
+        Object.keys(filters).forEach(key => {
             switch (key) {
                 case 'brand':
                     filterObject.brand = filters.brand;
