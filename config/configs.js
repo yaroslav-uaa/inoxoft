@@ -9,7 +9,7 @@ module.exports = {
 
     EMAIL_NODEMAILER: process.env.EMAIL_NODEMAILER || 'ya_ua_dev@meta.ua',
     PASSWORD_NODEMAILER: process.env.PASSWORD_NODEMAILER || 'Slavaukraini2021',
-    FRONT_URL: process.env.FRONT_URL || 'http://d30a-178-158-194-89.ngrok.io',
+    FRONT_URL: process.env.FRONT_URL || 'https://four-this-gen.vercel.app',
 
     AWS_S3_REGION: process.env.AWS_S3_REGION,
     AWS_S3_NAME: process.env.AWS_S3_NAME,
@@ -17,8 +17,8 @@ module.exports = {
     AWS_S3_SECRET_KEY: process.env.AWS_S3_SECRET_KEY,
 
     ALLOWED_ORIGIN:
-        process.env.ALLOWED_ORIGIN
-        || 'http://localhost:4200;http://localhost:3000;http://localhost:5000',
+        process.env.ALLOWED_ORIGIN ||
+        'http://localhost:4200;http://localhost:3000;http://localhost:5000',
 
     SENTRY_DSN: process.env.SENTRY_DSN,
 };

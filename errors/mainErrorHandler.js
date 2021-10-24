@@ -1,4 +1,5 @@
 const { INTERNAL_SERVER_ERROR } = require('../config/statusCodes.enum');
+const { login } = require('../controllers/auth');
 
 // eslint-disable-next-line no-unused-vars
 const _mainErrorHandler = (err, req, res, next) => {
